@@ -31,154 +31,225 @@ We use this categorical data encoding technique when the features are nominal(do
 • Yeojohnson method
 
 # CODING AND OUTPUT:
-    import pandas as pd
+import pandas as pd
 
-    from scipy import stats
+df=pd.read_csv("/content/Encoding Data.csv")
 
-    import numpy as np
+df
 
-    from sklearn.preprocessing import StandardScaler
+![image](https://github.com/user-attachments/assets/2e4f2994-10a5-46ee-926c-8ff85bc1d87a)
 
-    df=pd.read_csv("/content/bmi.csv")
+from sklearn.preprocessing import LabelEncoder,OrdinalEncoder
 
-    df.head()
+pm=['Hot','Warm','Cold']
 
-![image](https://github.com/user-attachments/assets/77dbc9bf-4472-4173-b787-654911d60bf8)
+e1=OrdinalEncoder(categories=[pm])
 
+e1.fit_transform(df[["ord_2"]])
 
-    df.dropna()
+![image](https://github.com/user-attachments/assets/761943cf-2c18-4ba4-8be2-a5baebb2aab6)
 
-![image](https://github.com/user-attachments/assets/953ec500-73bf-4557-b179-f3a348c7cd2b)
+df['bo2']=e1.fit_transform(df[["ord_2"]])
 
+df
 
-    max_vals=np.max(np.abs(df[['Height','Weight']]))
+![image](https://github.com/user-attachments/assets/bea4601f-a233-4685-b0cf-a92abb226882)
 
-    max_vals
+le=LabelEncoder()
 
-![image](https://github.com/user-attachments/assets/89bbb24f-9409-4dc0-8c49-ed1ea5da786d)
+dfc=df.copy()
 
+dfc['ord_2']=le.fit_transform(dfc['ord_2'])
 
-    from sklearn.preprocessing import StandardScaler
+dfc
 
-    sc = StandardScaler()
+![image](https://github.com/user-attachments/assets/dda818bd-a698-47a9-a6df-3a0ab8e737d9)
 
-    df=pd.read_csv("/content/bmi (1).csv")
+from sklearn.preprocessing import OneHotEncoder
 
-    df[['Height', 'Weight']] = sc.fit_transform(df[['Height', 'Weight']])
+ohe=OneHotEncoder(sparse_output=False)
 
-    print(df.head(10))
+df2=df.copy()
 
-![image](https://github.com/user-attachments/assets/ad41a79a-6cd4-4140-9d90-7360ae9f5c9c)
+enc=pd.DataFrame(ohe.fit_transform(df2[['nom_0']]))
 
+df2=pd.concat([df2,enc],axis=1)
 
-    from sklearn.preprocessing import MinMaxScaler
+df2
 
-    scaler=MinMaxScaler()
+![image](https://github.com/user-attachments/assets/276f8a49-0f1c-4804-8f0d-3ac0ef7c6feb)
 
-    df[['Height','Weight']]=scaler.fit_transform(df[['Height','Weight']])
+pd.get_dummies(df2,columns=["nom_0"])
 
-    df.head(10)
+![image](https://github.com/user-attachments/assets/8d21f06b-3831-4876-a73c-e73637503879)
 
-![image](https://github.com/user-attachments/assets/1ed09ea6-2b8d-4fd4-a320-c62b3bc594e0)
+pip install --upgrade category_encoders
 
+![image](https://github.com/user-attachments/assets/11db2d58-c43f-4d7f-93c1-d754b59d26c6)
 
-    from sklearn.preprocessing import Normalizer
 
-    scaler=Normalizer()
+from category_encoders import BinaryEncoder
 
-    df[['Height','Weight']]=scaler.fit_transform(df[['Height','Weight']])
+be=BinaryEncoder()
 
-    df
+df=pd.read_csv("/content/data.csv")
 
-![image](https://github.com/user-attachments/assets/1ab44a24-9cfe-4b91-bbfe-92b15e8ecefa)
+df
 
+![image](https://github.com/user-attachments/assets/8078e91f-7a66-4e81-969a-ee52a1c49f3f)
 
-    df3=pd.read_csv("/content/bmi.csv")
+be= BinaryEncoder()
 
-    from sklearn.preprocessing import MaxAbsScaler
+nd=be.fit_transform(df['Ord_2'])
 
-    scaler=MaxAbsScaler()
+df=pd.concat([df,nd],axis=1)
 
-    df3[['Height','Weight']]=scaler.fit_transform(df3[['Height','Weight']])
+dfb1=df.copy()
 
-    df3
+dfb1
 
-![image](https://github.com/user-attachments/assets/3e85af7b-a0cb-467c-91c7-3a1ac842e1e3)
+![image](https://github.com/user-attachments/assets/72635e68-2afb-4c15-a066-c61a55882a08)
 
 
-    df4=pd.read_csv("/content/bmi.csv")
+from category_encoders import TargetEncoder
 
-    from sklearn.preprocessing import RobustScaler
+te=TargetEncoder()
 
-    scaler=RobustScaler()
+cc=df.copy()
 
-    df4[['Height','Weight']]=scaler.fit_transform(df4[['Height','Weight']])
+new=te.fit_transform(X=cc["City"],y=cc["Target"])
 
-    df4.head()
-  
-![image](https://github.com/user-attachments/assets/cd2f677f-a7d8-47f7-a206-8c0699f73cec)
+cc=pd.concat([cc,new],axis=1)
 
+cc
 
+![image](https://github.com/user-attachments/assets/f12a1618-0925-405d-a98c-f58b62ba30a6)
 
-    from scipy.stats import chi2_contingency
+import pandas as pd
 
-    import seaborn as sns
+from scipy import stats
 
-    tips=sns.load_dataset('tips')
+import numpy as np
 
-    tips.head()
+df=pd.read_csv("/content/Data_to_Transform.csv")
 
-![image](https://github.com/user-attachments/assets/937657c5-db1f-47cd-9c86-45d064198a68)
+df
 
+![image](https://github.com/user-attachments/assets/ea3f4aa4-abac-4d70-8a45-c42e3031cb3e)
 
-    contigency_table=pd.crosstab(tips['sex'],tips['time'])
+df.skew()
 
-    print(contigency_table)
+![image](https://github.com/user-attachments/assets/5da1f669-86ab-4185-a17e-991ae4eac2cc)
 
-![image](https://github.com/user-attachments/assets/d7ac1871-adb7-49d9-b2fa-c547d977be9c)
+np.log(df["Highly Positive Skew"])
 
+![image](https://github.com/user-attachments/assets/1815a329-4eda-487a-b7b4-6b2a06546c33)
 
-    chi2,p, _, _ = chi2_contingency(contigency_table)
+np.reciprocal(df["Moderate Positive Skew"])
 
-    print(f"Chi-Square Statistic: {chi2}")
+![image](https://github.com/user-attachments/assets/168006d6-c505-4aed-a395-b7deb42924ed)
 
-  print(f"P-value: {p}")
+np.sqrt(df['Highly Positive Skew'])
 
-![image](https://github.com/user-attachments/assets/f11c97c3-1003-4dfe-a8ff-16c86dd780ca)
+![image](https://github.com/user-attachments/assets/b597ca2e-8dff-422e-998b-38edf4fa328b)
 
+np.square(df["Highly Positive Skew"])
 
-    import pandas as pd
+![image](https://github.com/user-attachments/assets/0367ee3a-af35-4f69-8d04-85d1f80e3458)
 
-    from sklearn.feature_selection import SelectKBest , mutual_info_classif,f_classif
+df["Highly Positive Skew_boxcox"],parameters=stats.boxcox(df['Highly Positive Skew'])
 
+df
 
-    data={
-    'Feature1':[1,2,3,4,5],
-    'Feature2':['A','B','C','A','B'],
-    'Feature3':[0,1,1,0,1],
-    'Target':[0,1,1,0,1]
-    }
+![image](https://github.com/user-attachments/assets/7f8d32e2-cb5b-49b7-b896-5c01e549c2c5)
 
-    df=pd.DataFrame(data)
+df.skew()
 
-    x=df[['Feature1','Feature3']]
+![image](https://github.com/user-attachments/assets/0fc05814-6c28-49a7-a070-46abdf65ed08)
 
-    y=df['Target']
+df["Highly Negative Skew_yeojohnson"],parameters=stats.yeojohnson(df["Highly Negative Skew"])
 
-    selector=SelectKBest(score_func=mutual_info_classif,k=1)
+df.skew()
 
-    X_new=selector.fit_transform(x,y)
+![image](https://github.com/user-attachments/assets/5f90a561-40af-4c75-b4c5-f284b7e2d29f)
 
-    selected_feature_indices=selector.get_support(indices=True)
+from sklearn.preprocessing import QuantileTransformer
 
-    selected_features=X.columns[selected_feature_indices]
+qt=QuantileTransformer(output_distribution='normal')
 
-    print("Selected Features:")
+df["Moderate Negative Skew_1"]=qt.fit_transform(df[["Moderate Negative Skew"]])
 
-    print(selected_features)
+df
 
-![image](https://github.com/user-attachments/assets/6cca2bd4-8ad2-4ffb-8919-f87e0f8f2a4d)
+![image](https://github.com/user-attachments/assets/8291853e-5c25-4684-852d-34388b21914e)
 
+import seaborn as sns
+
+import statsmodels.api as sm
+
+import matplotlib.pyplot as plt
+
+sm.qqplot(df["Moderate Negative Skew"],line='45')
+
+plt.show()
+
+![image](https://github.com/user-attachments/assets/e7f903f9-dbe3-4b46-94b9-7345794d04e4)
+
+sm.qqplot(np.reciprocal(df["Moderate Negative Skew"]),line='45')
+
+plt.show()
+
+![image](https://github.com/user-attachments/assets/e12550f8-0ff0-491f-b0b7-bd6badb4b8d7)
+
+from sklearn.preprocessing import QuantileTransformer
+
+qt=QuantileTransformer(output_distribution='normal',n_quantiles=891)
+
+df["Moderate Negative Skew"]=qt.fit_transform(df[["Moderate Negative Skew"]])
+
+sm.qqplot(df["Moderate Negative Skew"],line='45')
+
+plt.show()
+
+![image](https://github.com/user-attachments/assets/170a8263-5cee-4620-82b2-4b1751c5500f)
+
+df["Highly Negative Skew_1"]=qt.fit_transform(df[["Highly Negative Skew"]])
+
+sm.qqplot(df["Highly Negative Skew"],line='45')
+
+plt.show()
+
+![image](https://github.com/user-attachments/assets/6b3b8ef2-bb29-44d9-b526-f410401b2dd2)
+
+
+sm.qqplot(df["Highly Negative Skew_1"],line='45')
+
+plt.show()
+
+![image](https://github.com/user-attachments/assets/94e2a3be-e6b7-4d76-b527-b062f231c268)
+
+
+dt=pd.read_csv("/content/titanic_dataset (2).csv")
+
+from sklearn.preprocessing import QuantileTransformer
+
+qt=QuantileTransformer(output_distribution='normal',n_quantiles=891)
+
+dt["Age_1"]=qt.fit_transform(dt[["Age"]])
+
+sm.qqplot(dt['Age'],line='45')
+
+![image](https://github.com/user-attachments/assets/bb4d65f2-b2b2-439b-be65-cc8485157533)
+
+sm.qqplot(dt['Age_1'],line='45')
+
+plt.show()
+
+
+![image](https://github.com/user-attachments/assets/a52c79c0-5a2f-4167-9497-828a7a602808)
 
 # RESULT:
-       Thus we performed Feature Scaling and Feature Selection process
+
+      Thus we performed Feature Encoding and Transformation process
+
+       
